@@ -1,8 +1,8 @@
 import { type MatrixData } from "../models/MatrixData";
 
 const matrixData: MatrixData = {
-    rows: 50,
-    columns: 50,
-    ticInterval: 400
+    rows: 20,
+    columns: 20,
+    ticInterval: 100
 }
 export default matrixData
