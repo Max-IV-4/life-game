@@ -4,12 +4,21 @@ import { getRandomIntMatrix } from "../utils/random";
 import matrixData from "../config/matrix-config";
 
 function Matrix() {
-    const {rows, columns} = matrixData
+    const {rows, columns, ticInterval} = matrixData
     const [matrix, setMatrix] = React.useState<number[][]>([])
+    const lifeGame = React.useRef<LifeGameService>(null)
+    
     React.useEffect(() => {
-            const lifeGame = new LifeGameService(getRandomIntMatrix(rows, columns, 0, 1))
-            setMatrix(lifeGame.matrix)
+            lifeGame.current = new LifeGameService(getRandomIntMatrix(rows, columns, 0, 1))
+            setMatrix(lifeGame.current.matrix)
     }, [rows, columns])
+    React.useEffect(() => {
+        function tic() {
+            setMatrix(lifeGame.current!.nextMatrix())
+        }
+        const intervalId = setInterval(tic, ticInterval)
+        return () => clearInterval(intervalId)
+    }, [ticInterval])
     function getCells(matrix: number[][]): ReactNode {
         return matrix.map((row, rInd) => {
             return row.map((cellValue, cInd) => <div key={`${rInd}-${cInd}`}
